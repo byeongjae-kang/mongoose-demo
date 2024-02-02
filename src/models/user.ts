@@ -1,4 +1,4 @@
-import { Model, Schema, model } from 'mongoose';
+import { HydratedDocument, Model, Schema, model } from 'mongoose';
 
 type UserType = {
   email: string;
@@ -6,7 +6,7 @@ type UserType = {
 };
 
 type UserStaticMethodType = {
-  build(user: UserType): unknown;
+  build(user: UserType): Promise<HydratedDocument<UserType>>;
 };
 
 type UserModel = Model<UserType> & UserStaticMethodType;
@@ -34,7 +34,7 @@ const userSchema = new Schema<
     timestamps: true,
     versionKey: false,
     statics: {
-      async build(user: UserType) {
+      async build(user: UserType): Promise<HydratedDocument<UserType>> {
         const newUser = new this(user);
         await newUser.save();
 
