@@ -1,5 +1,4 @@
 import { Request, Response, Router } from 'express';
-import { Types } from 'mongoose';
 import { Task } from '../models/task';
 
 export const router = Router();
@@ -10,19 +9,19 @@ router.get('/', async (req: Request, res: Response) => {
   res.json(tasks);
 });
 
+// ******
 router.get('/:id', async (req: Request, res: Response) => {
-  const task = await Task.findById(req.params.id).populate('createdBy').lean().exec();
+  const task = await Task.findById(req.params.id).populateAll();
 
   res.json(task);
 });
 
+// **********
 router.post('/', async (req: Request, res: Response) => {
-  const isValidId = Types.ObjectId.isValid('65bc21953ea018c9636defcd');
-  const id = isValidId ? '65bc21953ea018c9636defcd' : new Types.ObjectId();
-
   const task = await Task.create({
     task: 'my first task',
-    createdBy: id
+    createdBy: '65bc21953ea018c9636defcd',
+    categories: ['65bd6503bd57442a3ed3f821', '65bd65885fb45fe7b497b443', '65bd65b24bc1e015487a17f2']
   });
 
   res.json(task);

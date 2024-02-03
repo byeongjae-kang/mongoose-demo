@@ -1,8 +1,22 @@
 import { HydratedDocument, Model, Schema, model } from 'mongoose';
 
+type AddressType = {
+  zip: string;
+  street: string;
+};
+
+const addressSchema = new Schema<AddressType>(
+  {
+    zip: String,
+    street: String
+  },
+  { timestamps: true, versionKey: false }
+);
+
 type UserType = {
   email: string;
   password: string;
+  address: AddressType;
 };
 
 type UserStaticMethodType = {
@@ -28,7 +42,8 @@ const userSchema = new Schema<
     password: {
       type: String,
       required: true
-    }
+    },
+    address: addressSchema
   },
   {
     timestamps: true,
